@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { format, addMonths, addYears } from 'date-fns';
 
@@ -45,8 +44,20 @@ function LungFollowUpApp() {
           ))}
         </div>
       )}
+
+      <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+        <a
+          href="https://github.com/drcjar/lung-followup-app"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: '#0366d6', textDecoration: 'underline' }}
+        >
+          View on GitHub
+        </a>
+      </div>
     </div>
   );
 }
 
 export default LungFollowUpApp;
+
