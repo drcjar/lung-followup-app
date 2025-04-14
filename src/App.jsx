@@ -17,7 +17,7 @@ function CopyPlanButton({ schedule, surgeryDate }) {
   return (
     <button
       onClick={copyToClipboard}
-      className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+      className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
     >
       {copied ? "Copied!" : "Copy Plan"}
     </button>
@@ -94,59 +94,56 @@ export default function App() {
   const schedule = surgeryDate ? generateSchedule(surgeryDate, scheduleType) : [];
 
   return (
-    <div className="max-w-xl mx-auto p-4 space-y-6">
-      <h1 className="text-2xl font-bold">Lung Follow-up Planner</h1>
+    <div className="min-h-screen bg-gray-50 py-10 px-4">
+      <div className="max-w-2xl mx-auto bg-white rounded-xl shadow p-6 space-y-6">
+        <h1 className="text-3xl font-bold text-center">Lung Follow-up Planner</h1>
 
-      <div className="space-y-2">
-        <label className="block font-medium">Surgery Date</label>
-        <input
-          type="date"
-          value={surgeryDate}
-          onChange={(e) => setSurgeryDate(e.target.value)}
-          className="border px-2 py-1 rounded w-full"
-        />
-      </div>
+        <div className="space-y-4">
+          <div>
+            <label className="block font-medium mb-1">Surgery Date</label>
+            <input
+              type="date"
+              value={surgeryDate}
+              onChange={(e) => setSurgeryDate(e.target.value)}
+              className="border px-3 py-2 rounded w-full"
+            />
+          </div>
 
-      <div className="space-y-2">
-        <label className="block font-medium">Follow-up Protocol</label>
-        <select
-          value={scheduleType}
-          onChange={(e) => setScheduleType(e.target.value)}
-          className="border px-2 py-1 rounded w-full"
-        >
-          <option value="NEL">NHS North East London</option>
-          <option value="ICL">Imperial College London</option>
-        </select>
-      </div>
-
-      {schedule.length > 0 && (
-        <div className="space-y-2">
-          <h2 className="text-lg font-semibold">Follow-up Schedule</h2>
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr>
-                <th className="border-b pb-1">Timepoint</th>
-                <th className="border-b pb-1">Imaging</th>
-                <th className="border-b pb-1">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {schedule.map((item, idx) => (
-                <tr key={idx}>
-                  <td className="py-1">{item.label}</td>
-                  <td className="py-1">{item.type}</td>
-                  <td className="py-1">{item.date}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <CopyPlanButton
-            schedule={schedule.map(({ label, type }) => ({ label, type }))}
-            surgeryDate={formattedDate}
-          />
+          <div>
+            <label className="block font-medium mb-1">Follow-up Protocol</label>
+            <select
+              value={scheduleType}
+              onChange={(e) => setScheduleType(e.target.value)}
+              className="border px-3 py-2 rounded w-full"
+            >
+              <option value="NEL">NHS North East London</option>
+              <option value="ICL">Imperial College London</option>
+            </select>
+          </div>
         </div>
-      )}
+
+        {schedule.length > 0 && (
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold text-center">Follow-up Schedule</h2>
+            <div className="space-y-2">
+              {schedule.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="border border-gray-200 rounded-lg p-4 bg-gray-100"
+                >
+                  <p className="font-semibold">{item.label} — {item.type}</p>
+                  <p className="text-gray-700">{item.date}</p>
+                </div>
+              ))}
+            </div>
+
+            <CopyPlanButton
+              schedule={schedule.map(({ label, type }) => ({ label, type }))}
+              surgeryDate={formattedDate}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
