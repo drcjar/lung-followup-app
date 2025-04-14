@@ -1,63 +1,153 @@
-import { useState } from 'react';
-import { format, addMonths, addYears } from 'date-fns';
+import { useState } from "react";
 
-function LungFollowUpApp() {
-  const [surgeryDate, setSurgeryDate] = useState('');
-  const [scanSchedule, setScanSchedule] = useState([]);
+function CopyPlanButton({ schedule, surgeryDate }) {
+  const [copied, setCopied] = useState(false);
 
-  const generateSchedule = () => {
-    const baseDate = new Date(surgeryDate);
-    const schedule = [
-      { label: '3 months', type: 'CXR', date: addMonths(baseDate, 3) },
-      { label: '6 months', type: 'CT', date: addMonths(baseDate, 6) },
-      { label: '9 months', type: 'CXR', date: addMonths(baseDate, 9) },
-      { label: '12 months', type: 'CT', date: addMonths(baseDate, 12) },
-      { label: '18 months', type: 'CT', date: addMonths(baseDate, 18) },
-      { label: '24 months', type: 'CT', date: addMonths(baseDate, 24) },
-      { label: 'Year 3', type: 'CT', date: addYears(baseDate, 3) },
-      { label: 'Year 4', type: 'CT', date: addYears(baseDate, 4) },
-      { label: 'Year 5', type: 'CT', date: addYears(baseDate, 5) },
-    ];
-    setScanSchedule(schedule);
+  const formattedText = `Lung cancer post-operative follow-up plan:\n\n${schedule
+    .map(item => `• ${item.label}: ${item.type}`)
+    .join("\n")}\n\nBased on surgery date: ${surgeryDate}`;
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(formattedText).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    });
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '1rem' }}>
-      <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Lung Cancer Surgery Follow-Up Planner</h1>
-      <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+    <button
+      onClick={copyToClipboard}
+      className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+    >
+      {copied ? "Copied!" : "Copy Plan"}
+    </button>
+  );
+}
+
+function generateSchedule(surgeryDateStr, type = "NEL") {
+  const schedules = {
+    ICL: {
+      months: [3, 6, 9, 12, 18, 24, 36, 48, 60],
+      types: {
+        3: "CXR",
+        6: "CT",
+        9: "CXR",
+        12: "CT",
+        18: "CT",
+        24: "CT",
+        36: "CT",
+        48: "CT",
+        60: "CT",
+      },
+    },
+    NEL: {
+      months: [1.5, 3, 6, 9, 12, 15, 18, 24, 30, 36, 48, 60],
+      types: {
+        1.5: "CXR",
+        3: "CT Chest",
+        6: "CXR",
+        9: "CXR",
+        12: "CT Chest/Abdo",
+        15: "CXR",
+        18: "CT Chest/Abdo",
+        24: "CT Chest/Abdo",
+        30: "CXR",
+        36: "CT Chest/Abdo",
+        48: "CT Chest/Abdo",
+        60: "CT Chest/Abdo",
+      },
+    },
+  };
+
+  const { months, types } = schedules[type];
+  const surgeryDate = new Date(surgeryDateStr);
+  const formatter = new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
+  return months.map((m) => {
+    const followUpDate = new Date(surgeryDate);
+    followUpDate.setMonth(surgeryDate.getMonth() + Math.floor(m));
+    followUpDate.setDate(surgeryDate.getDate() + Math.round((m % 1) * 30));
+    return {
+      label: `${m} months`,
+      type: types[m],
+      date: formatter.format(followUpDate),
+    };
+  });
+}
+
+export default function App() {
+  const [surgeryDate, setSurgeryDate] = useState("");
+  const [scheduleType, setScheduleType] = useState("NEL");
+
+  const formattedDate = surgeryDate
+    ? new Date(surgeryDate).toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+    : "";
+
+  const schedule = surgeryDate ? generateSchedule(surgeryDate, scheduleType) : [];
+
+  return (
+    <div className="max-w-xl mx-auto p-4 space-y-6">
+      <h1 className="text-2xl font-bold">Lung Follow-up Planner</h1>
+
+      <div className="space-y-2">
+        <label className="block font-medium">Surgery Date</label>
         <input
           type="date"
           value={surgeryDate}
           onChange={(e) => setSurgeryDate(e.target.value)}
-          style={{ padding: '0.5rem', flex: '1' }}
+          className="border px-2 py-1 rounded w-full"
         />
-        <button onClick={generateSchedule} style={{ padding: '0.5rem 1rem' }}>Generate</button>
       </div>
 
-      {scanSchedule.length > 0 && (
-        <div style={{ marginTop: '1rem' }}>
-          {scanSchedule.map((item, idx) => (
-            <div key={idx} style={{ border: '1px solid #ccc', borderRadius: '0.5rem', padding: '1rem', marginBottom: '0.5rem' }}>
-              <p style={{ fontWeight: 'bold' }}>{item.label} — {item.type}</p>
-              <p>{format(item.date, 'PPP')}</p>
-            </div>
-          ))}
+      <div className="space-y-2">
+        <label className="block font-medium">Follow-up Protocol</label>
+        <select
+          value={scheduleType}
+          onChange={(e) => setScheduleType(e.target.value)}
+          className="border px-2 py-1 rounded w-full"
+        >
+          <option value="NEL">NHS North East London</option>
+          <option value="ICL">Imperial College London</option>
+        </select>
+      </div>
+
+      {schedule.length > 0 && (
+        <div className="space-y-2">
+          <h2 className="text-lg font-semibold">Follow-up Schedule</h2>
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr>
+                <th className="border-b pb-1">Timepoint</th>
+                <th className="border-b pb-1">Imaging</th>
+                <th className="border-b pb-1">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {schedule.map((item, idx) => (
+                <tr key={idx}>
+                  <td className="py-1">{item.label}</td>
+                  <td className="py-1">{item.type}</td>
+                  <td className="py-1">{item.date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <CopyPlanButton
+            schedule={schedule.map(({ label, type }) => ({ label, type }))}
+            surgeryDate={formattedDate}
+          />
         </div>
       )}
-
-      <div style={{ marginTop: '2rem', textAlign: 'center' }}>
-        <a
-          href="https://github.com/drcjar/lung-followup-app"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: '#0366d6', textDecoration: 'underline' }}
-        >
-          View on GitHub
-        </a>
-      </div>
     </div>
   );
 }
-
-export default LungFollowUpApp;
 
