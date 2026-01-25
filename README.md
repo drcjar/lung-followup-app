@@ -1,4 +1,4 @@
-Following potentially curative NSCLC surgery follow up is for 5 years. For example, for Imperial outlined here and updated 2024.
+Following potentially curative NSCLC surgery follow up is for 5 years. For example, for NEL outlined here and updated 2026.
 
 | Time post surgery | Proposed 
 |-------------------|----------|
@@ -8,11 +8,13 @@ Following potentially curative NSCLC surgery follow up is for 5 years. For examp
 | 24 months         | CT       |
 | 30 months&dagger; | CT       |
 | 36 months         | CT       |
-| Yearly to 5 years* | CT      |
+| Yearly to 10 years* | CT      |
 
-(In line with ESMO 2017 and ASCO guidelines 2019)
+(In line with ESMO 2025 and ASCO guidelines 2019)
 
-\* one may wish to continue beyond 5 years in selected patients who would still be for active treatment[1]
+&dagger; if high risk of recurrence
+
+\* consider if would still be fit for active treatment, potential for recurrence, and referral to screening programme[1]
 
 because it's a bit annoying to work out every time, you can stick the date of surgery in here:
 
