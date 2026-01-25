@@ -8,13 +8,13 @@ Following potentially curative NSCLC surgery follow up is for 5 years. For examp
 | 24 months         | CT       |
 | 30 months&dagger; | CT       |
 | 36 months         | CT       |
-| Yearly to 10 years* | CT      |
+| Yearly to 10 years&Dagger; | CT      |
 
 (In line with ESMO 2025 and ASCO guidelines 2019)
 
 &dagger; if high risk of recurrence
 
-\* consider if would still be fit for active treatment, potential for recurrence, and referral to screening programme[1]
+&Dagger; consider if would still be fit for active treatment, potential for recurrence, and referral to screening programme[1]
 
 because it's a bit annoying to work out every time, you can stick the date of surgery in here:
 
