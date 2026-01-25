@@ -6,7 +6,7 @@ Following potentially curative NSCLC surgery follow up is for 5 years. For examp
 | 12 months         | CT       |
 | 18 months         | CT       |
 | 24 months         | CT       |
-| 30 months(\dag).         | CT       |
+| 30 months \dag        | CT       |
 | 36 months         | CT       |
 | Yearly to 5 years* | CT      |
 
