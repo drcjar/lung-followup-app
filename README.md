@@ -1,14 +1,14 @@
 Following potentially curative NSCLC surgery follow up is for 5 years. For example, for NEL outlined here and updated 2026.
 
 | Time post surgery | Proposed 
-|-------------------|----------|
-| 6 months          | CT       |
-| 12 months         | CT       |
-| 18 months         | CT       |
-| 24 months         | CT       |
-| 30 months&dagger; | CT       |
-| 36 months         | CT       |
-| Yearly to 10 years&Dagger; | CT      |
+|-------------------|--------------------|
+| 6 months          | CT Chest/Abdo      |
+| 12 months         | CT Chest/Abdo      |
+| 18 months         | CT Chest/Abdo      |
+| 24 months         | CT Chest/Abdo      |
+| 30 months&dagger; | CT Chest/Abdo      |
+| 36 months         | CT Chest/Abdo      |
+| Yearly to 10 years&Dagger; | CT        |
 
 (In line with ESMO 2025 and ASCO guidelines 2019)
 
