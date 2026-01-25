@@ -24,7 +24,7 @@ function CopyPlanButton({ schedule, surgeryDate }) {
   );
 }
 
-function generateSchedule(surgeryDateStr, type = "NEL") {
+function generateSchedule(surgeryDateStr, type = "NEL", highRisk = false) {
   const schedules = {
     ICL: {
       months: [3, 6, 9, 12, 18, 24, 36, 48, 60],
@@ -41,20 +41,24 @@ function generateSchedule(surgeryDateStr, type = "NEL") {
       },
     },
     NEL: {
-      months: [1.5, 3, 6, 9, 12, 15, 18, 24, 30, 36, 48, 60],
+      // Updated to match README: 6,12,18,24,36 (+30 if high risk) then annual to 10y
+      months: highRisk
+        ? [6, 12, 18, 24, 30, 36, 48, 60, 72, 84, 96, 108, 120]
+        : [6, 12, 18, 24, 36, 48, 60, 72, 84, 96, 108, 120],
       types: {
-        1.5: "CXR",
-        3: "CT Chest",
-        6: "CXR",
-        9: "CXR",
+        6: "CT Chest/Abdo",
         12: "CT Chest/Abdo",
-        15: "CXR",
         18: "CT Chest/Abdo",
         24: "CT Chest/Abdo",
-        30: "CXR",
+        30: "CT Chest/Abdo", // high risk only
         36: "CT Chest/Abdo",
         48: "CT Chest/Abdo",
         60: "CT Chest/Abdo",
+        72: "CT Chest/Abdo",
+        84: "CT Chest/Abdo",
+        96: "CT Chest/Abdo",
+        108: "CT Chest/Abdo",
+        120: "CT Chest/Abdo",
       },
     },
   };
@@ -79,9 +83,11 @@ function generateSchedule(surgeryDateStr, type = "NEL") {
   });
 }
 
+
 export default function App() {
   const [surgeryDate, setSurgeryDate] = useState("");
   const [scheduleType, setScheduleType] = useState("NEL");
+  const [nelHighRisk, setNelHighRisk] = useState(false);
 
   const formattedDate = surgeryDate
     ? new Date(surgeryDate).toLocaleDateString("en-GB", {
@@ -91,7 +97,10 @@ export default function App() {
       })
     : "";
 
-  const schedule = surgeryDate ? generateSchedule(surgeryDate, scheduleType) : [];
+  const schedule = surgeryDate
+  ? generateSchedule(surgeryDate, scheduleType, nelHighRisk)
+  : [];
+
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
@@ -113,12 +122,33 @@ export default function App() {
             <label className="block font-medium mb-1">Follow-up Protocol</label>
             <select
               value={scheduleType}
-              onChange={(e) => setScheduleType(e.target.value)}
+              onChange={(e) => {
+  		const next = e.target.value;
+  		setScheduleType(next);
+  		if (next !== "NEL") setNelHighRisk(false);
+		}}
+
               className="border px-3 py-2 rounded w-full"
             >
+
               <option value="NEL">NHS North East London</option>
               <option value="ICL">Imperial College London</option>
             </select>
+            {scheduleType === "NEL" && (
+              <div className="flex items-center gap-2 mt-2">
+                <input
+                  id="nelHighRisk"
+                  type="checkbox"
+                  checked={nelHighRisk}
+                  onChange={(e) => setNelHighRisk(e.target.checked)}
+                  className="h-4 w-4"
+                />
+                <label htmlFor="nelHighRisk" className="text-sm text-gray-800">
+                  High risk (e.g. R1/2 resections, PL 1/2 disease, STAS - adds 30-month CT)
+                </label>
+              </div>
+            )}
+
           </div>
         </div>
 
