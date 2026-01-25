@@ -1,2 +1,16 @@
 node_modules/
 
+
+# dependencies
+node_modules/
+
+# build output
+dist/
+
+# misc
+*.log
+.DS_Store
+
+# local env
+.env
+.env.*
